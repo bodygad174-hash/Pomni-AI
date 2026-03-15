@@ -1,7 +1,7 @@
 import { Sticker, StickerTypes } from "wa-sticker-formatter";
 
 const test = async (m, { conn }) => {
-  if (!m.quoted) return m.reply("يرجى الرد على صورة أو فيديو لتحويله إلى ملصق");
+  if(!m.quoted) return m.reply("reply?")
   
   const media = await m.quoted.download();
 
@@ -9,7 +9,7 @@ const test = async (m, { conn }) => {
     pack: "ڤـ ـ VA ـ ــا",  
     author: "VA",
     quality: 100,
-    type: StickerTypes.FULL
+    type: iStickerTypes.FULL
   };
 
   const sticker = new Sticker(media, stickerConfig);
@@ -22,7 +22,7 @@ const test = async (m, { conn }) => {
   );
 };
 
-test.usage = ["ملصق"];
-test.command = ["ملصق", "s"];
+test.usage = ["ملصق"]
+test.command = ["ملصق", "s"]
 test.category = "sticker";
 export default test;

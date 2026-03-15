@@ -1,7 +1,7 @@
-const insta = async (m, { text, scrapy, conn }) => {
+const insta = async (m, { text, Api, conn }) => {
   if (!text) return m.reply("❌: حط الرابط جنب الامر");
   
-  const { status, data } = await scrapy.download.instagram.snapinsta({ url: text });
+  const { status, data } = await Api.download.instagram ({ url: text })
   
   try {
     if (status !== 'success') {
