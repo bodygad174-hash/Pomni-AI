@@ -6,12 +6,10 @@ import { group, access } from "./system/control.js";
 const client = new Client({
   phoneNumber: '20123456789', // bot number 
   info: { 
-  nameBot: "Pomni AI", 
-  nameChannel: "𝐕𝐈𝐈7 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️", 
-  idChannel: "120363225356834044@newsletter"
+   nameBot: "Pomni AI", 
+   nameChannel: "𝐕𝐈𝐈7 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️", 
+   idChannel: "120363225356834044@newsletter"
 },
-  fromMe: false,
-  showLogs: true,
   commandsPath: './plugins',
   prefix: [".", "/", "!"],
   owners: [
@@ -27,9 +25,8 @@ const client = new Client({
       { name: "Sukuna", 
       jid: "201033024135@s.whatsapp.net", lid: "50414477168824@lid" }
   ],
-  autoReconnect: true,
-  printQR: false,
-  markOnline: true,
+  fromMe: false,
+  showLogs: true,
 });
 
 client.onGroupEvent(group)
