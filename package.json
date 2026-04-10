@@ -11,7 +11,7 @@
   "author": "VENi - youssefv",
   "license": "MIT",
   "dependencies": {
-    "whatsappy": "https://github.com/deveni0/ws/tarball/main",
+    "meowsab": "https://github.com/deveni0/ws/tarball/main",
     "sharp": "https://github.com/deveni0/sharp-tmx/tarball/main",
     "cheerio": "1.0.0-rc.12",
     "chokidar": "^5.0.0",

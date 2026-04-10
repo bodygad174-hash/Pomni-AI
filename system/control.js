@@ -73,6 +73,7 @@ const access = async (msg, checkType, time) => {
         admin: `*♡📯 الأمر ده لـ الادمن فقط 📯♡*\n⊱⋅ ──────────── ⋅⊰\n> *_انت مجرد عضو لازم تبقي ادمن يا عضو يا عبد_*`,
         private: `*♡🏷️ الأمر ده في الخاص فقط 🏷️♡*\n⊱⋅ ──────────── ⋅⊰\n> *_الامر ف الخاص بس ياحبيبي_*`,
         botAdmin: `*♡📌 لازم اكون ادمن عشان انقذ الأمر 📌♡*\n⊱⋅ ──────────── ⋅⊰\n> *_حطني ادمن عشان تقدر تستعمل الأمر ده_*`,
+        noSub: `*♡🫒 الأمر ده ف البوت الأساسي فقط 🫒♡*\n⊱⋅ ──────────── ⋅⊰\n> *_ادخل الجروب ده و جرب الأمر [ https://chat.whatsapp.com/Epfd9J7t8tR6nnpIDjtGQZ?mode=gi_t ] ياريت من غير سبام_*`,
         disabled: `*♡🗃️ الامر متوقف (تحت صيانة) 🗃️♡*\n⊱⋅ ──────────── ⋅⊰\n> *_الامر تحت صيانه قريباً بيشتغل تاني_*`,
         error: `*♡❌ الأمر فيه خطأ، كلم المطورين ❌♡*\n⊱⋅ ──────────── ⋅⊰\n*_اكتب " .المطور " عشان يبعتلك رقم المطور_*`
     };
@@ -88,9 +89,9 @@ const access = async (msg, checkType, time) => {
             },
             big: false
         }, quoted);
-      // await conn.sendMessage(msg.chat, { text: msgs[checkType] }, { quoted });
+        return false;  
     }
-    return null;
+    return null;  
 };
 
 export { access, group };

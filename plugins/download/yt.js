@@ -1,4 +1,4 @@
-import { Scrapy } from "whatsappy";
+import { Scrapy } from "meowsab";
 
 const handler = async (m, { conn, command, text }) => {
   if (!text) throw '*❲ ❤️ ❳ ~ حط رابط جنب الامر ~ ❲ 💙 ❳ *';

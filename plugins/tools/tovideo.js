@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cheerio from 'cheerio';
 import FormData from 'form-data';
-import { Convert } from "whatsappy";
+import { Convert } from "meowsab";
 
 let handler = async (m, { conn, text, command }) => {
  

@@ -1,7 +1,6 @@
 async function handler(m, { conn, command, args }) {
     const chatId = m.chat;
     const subCmd = args[0]?.toLowerCase();
-
     const menu = `
 ╭─┈─┈─┈─⟞🕸️⟝─┈─┈─┈─╮
 │ *نظام التفعيل والتشغيل*
@@ -29,10 +28,44 @@ async function handler(m, { conn, command, args }) {
 │
 │ *.تفعيل ايقاف_مضاد_الروابط*
 │ > البوت مايحذفش الروابط
+│
+│ *.تفعيل ايقاف_خاص*
+│ > البوت هيشتغل مع المطورين فقط خاص
+│
+│ *.تفعيل تشغيل_خاص*
+│ > البوت هيشتغل مع كله خاص
 ╰─┈─┈─┈─⟞🕸️⟝─┈─┈─┈─╯
 `;
-
-    if (!subCmd) return m.reply(menu);
+    if (!subCmd) {
+        await conn.sendButton(m.chat, {
+            bodyText:  menu,
+            footerText: "𝐕𝐈𝐈7 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️",
+            buttons: [
+    { name: "quick_reply", params: { display_text: "🔇 ايقاف الترحيب", id: ".تفعيل ايقاف_الترحيب" } },
+    { name: "quick_reply", params: { display_text: "🔊 تشغيل الترحيب", id: ".تفعيل تشغيل_الترحيب" } },
+    { name: "quick_reply", params: { display_text: "👑 تشغيل الادمن", id: ".تفعيل تشغيل_الادمن" } },
+    { name: "quick_reply", params: { display_text: "👥 ايقاف الادمن", id: ".تفعيل ايقاف_الادمن" } },
+    { name: "quick_reply", params: { display_text: "⭐ مطور فقط", id: ".تفعيل مطور_فقط" } },
+    { name: "quick_reply", params: { display_text: "🌍 مطور عام", id: ".تفعيل مطور_عام" } },
+    { name: "quick_reply", params: { display_text: "🚫 تشغيل مضاد الروابط", id: ".تفعيل تشغيل_مضاد_الروابط" } },
+    { name: "quick_reply", params: { display_text: "✅ ايقاف مضاد الروابط", id: ".تفعيل ايقاف_مضاد_الروابط" } },
+    { name: "quick_reply", params: { display_text: "🌟 تشغيل خاص لـ المطورين فقط", id: ".تفعيل ايقاف_خاص" } },
+    { name: "quick_reply", params: { display_text: "💔 ايقاف التشغيل خاص لـ المطورين فقط", id: ".تفعيل تشغيل_خاص" } }
+],
+          mentions: [m.sender],
+  newsletter: {
+      name: '𝐕𝐈𝐈7 ~ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 🕷️',
+      jid: '120363225356834044@newsletter'
+    },
+  interactiveConfig: {
+    buttons_limits: 1, // لازم تبقي واحد
+    list_title: "Available Options",
+    button_title: "Click Here",
+    canonical_url: "https://example.com"
+  }
+        }, m);
+        return;
+    }
 
     let result;
     
@@ -108,13 +141,27 @@ async function handler(m, { conn, command, args }) {
             global.db.groups[chatId].antiLink = false;
             result = '*✅ تم ايقاف مضاد الروابط*\n> البوت مايحذفش الروابط';
             break;
-            
+            case 'ايقاف_خاص':
+            if (!m.isOwner) {
+                result = '*❌ هذا الأمر للمطورين فقط*';
+                break;
+            }
+            global.db.dev = true;
+            result = '*✅ تم ايقاف الخاص للمستخدمين*\n> فقط المطورين يقدروا يستحدموه خاص';
+            break;
+            case 'تشغيل_خاص':
+            if (!m.isOwner) {
+                result = '*❌ هذا الأمر للمطورين فقط*';
+                break;
+            }
+            global.db.dev = false;
+            result = '*✅ تم تشغيل البوت خاص ل الكل*\n> كله دلوقت يقدر يستخدم البوت خاص';
+            break;
         default:
-            return m.reply(menu);
+            return m.reply("╭─┈─┈─┈─⟞🕸️⟝─┈─┈─┈─╮\n│ *نظام التفعيل والتشغيل*\n│\n│ 🔇 ايقاف_الترحيب\n│ 🔊 تشغيل_الترحيب\n│ 👑 تشغيل_الادمن\n│ 👥 ايقاف_الادمن\n│ ⭐ مطور_فقط\n│ 🌍 مطور_عام\n│ 🚫 تشغيل_مضاد_الروابط\n│ ✅ ايقاف_مضاد_الروابط\n╰─┈─┈─┈─⟞🕸️⟝─┈─┈─┈─╯");
     }
     
     if (result) {
-        if (result.startsWith('*❌')) return m.reply(result);
         m.reply(result);
     }
 };

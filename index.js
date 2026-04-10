@@ -1,6 +1,7 @@
-import { Client } from 'whatsappy';
+import { Client } from 'meowsab';
 import { group, access } from "./system/control.js";
 import UltraDB from "./system/UltraDB.js";
+import sub from './sub.js';
 
 /* =========== Client ========== */
 const client = new Client({
@@ -15,7 +16,7 @@ const client = new Client({
   // Owner 3
     { name: "Sukuna", jid: "201033024135@s.whatsapp.net", lid: "50414477168824@lid" },
   // Owner 4 
-    { name: "عمورتي", jid: "201050079089@s.whatsapp.net", lid: "51664513925368@lid" }
+   { name: "عمورتي", jid: "201050079089@s.whatsapp.net", lid: "51664513925368@lid" }
   ],
   commandsPath: './plugins'
 });
@@ -52,3 +53,9 @@ config.info = {
 
 /* =========== Start ========== */
 client.start();
+
+setTimeout(async () => {
+if (client.commandSystem) { 
+sub(client)
+  }
+}, 2000);
