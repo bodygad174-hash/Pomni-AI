@@ -18,7 +18,7 @@ const handler = async (m, { conn }) => {
 
 handler.usage = ["ضع"];
 handler.category = "owner";
-handler.command = ["ضع", "botpp""];
+handler.command = ["ضع", "botpp"];
 handler.owner = true;
 
 export default handler;
