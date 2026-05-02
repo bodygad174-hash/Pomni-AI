@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  pomni-ai:
+    build: .
+    container_name: pomni-ai
+    restart: unless-stopped
+    volumes:
+      - ./sessions:/app/sessions  # عشان الـ QR session يتحفظ
+    environment:
+      - NODE_ENV=production
+    stdin_open: true   # مهم عشان تقدر تسكن الـ QR code
+    tty: true
