@@ -4,11 +4,13 @@ const handler = async (m, { conn }) => {
 
     if (!/image/.test(mime)) {
         return m.reply('🖼️ ~ رد على صورة لتغيير صورة البوت');
-    }
+    }=>
+     const jid = conn.user.id.split(":")[0] + "@s.whatsapp.net";
+
 
     try {
         const media = await q.download();
-        await conn.updateProfilePicture(conn.user.jid, media);
+        await conn.updateProfilePicture(jid, media);
         m.reply('✅ ~ تم تغيير صورة بروفايل البوت');
     } catch (error) {
         console.error(error);

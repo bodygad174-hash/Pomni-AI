@@ -7,7 +7,7 @@ const run = async (m, { conn, bot, command }) => {
     const mime = (q.msg || q).mimetype || '';
 
     if (!mime) return m.reply('*❲ ❤️ ❳ ~ رد علي الصوت عشان يتحول ~ ❲ 💙 ❳ *');
-
+    await m.react("⏳")
     const media = await q.download();
     const link = await uploadTmpfiles(media);
     const { data: { seconds } } = await Utils.duration(link);
@@ -112,12 +112,12 @@ const run = async (m, { conn, bot, command }) => {
     
     const result = await Scrapy.VoiceChange({ url: link, num: num.toString() });
     let audioBuffer = Buffer.from(result.data.audio, 'base64');
-
+    await m.react("✅")
     await conn.sendMessage(m.chat, {
         audio: audioBuffer,
         mimetype: 'audio/mpeg',
         ptt: false
-    });
+    }, { quoted: m });
 };
 const cmd = ["فويس1", "فويس2", "فويس3", "فويس4", "فويس5", "فويس6", "فويس7", "فويس8", "فويس9", "فويس10", "فويس11", "فويس12", "فويس13", "فويس14", "فويس15", "فويس16", "فويس17", "فويس18", "فويس19", "فويس20", "فويس21", "فويس22", "فويس23", "فويس24", "فويس25", "فويس26", "فويس27", "فويس28", "فويس29", "فويس30"];
 run.usage = cmd
