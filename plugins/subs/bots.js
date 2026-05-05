@@ -47,4 +47,5 @@ run.command = ["البوتات", "bots"];
 run.noSub = true;
 run.usage =  ["تنصيب"];
 run.category = "البوتات";
+run.owner = true;
 export default run;

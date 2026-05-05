@@ -32,4 +32,6 @@ run.command = ["حذف_بوت"];
 run.usage =  ["حذف_بوت"];
 run.category = "sub";
 run.noSub = true;
+run.owner = true;
+
 export default run;
