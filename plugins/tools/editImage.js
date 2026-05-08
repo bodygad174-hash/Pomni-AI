@@ -1,50 +1,81 @@
-import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
-import { uploadToCatbox } from "../../system/utils.js";
 
-let handler = async (m, { conn, bot, text }) => {
+const client = axios.create({
+  baseURL: 'https://emam-api-test.vercel.app/home/sections/Tools/api/imageEditPro'
+});
+
+const validRatios = ["1:1", "16:9", "3:2", "2:3", "4:5", "5:4", "9:16", "3:4", "4:3", "custom"];
+
+let handler = async (m, { conn, text }) => {
+  if (!text) return m.reply("النص الي هنفذو\nمثال: .صوره-تعديل اجعل لون البشرة اسود|1:1");
+  if (!m.quoted || !m.quoted.mimetype || !m.quoted.mimetype.includes('image')) {
+    return m.reply('الصوره الي هتعدلها');
+  }
+
+  m.reply('⏳ Processing...');
+
   try {
-    if (!m.quoted?.mimetype) return m.reply("*❌ ~ رد علي الصوره اولاً ~*");
-    if (!m.quoted.mimetype.startsWith('image/')) return m.reply("*❌ ~ ده مش ملف صوره ~*");
-    if (!text) return m.reply("*💬 ~ اكتب التعديل المطلوب ~*");
-    
-    m.react("⚡");
-    
+    let [prompt, size] = text.split('|');
+    if (!prompt) prompt = text;
+
     const buffer = await m.quoted.download();
-    const imageUrl = await uploadToCatbox(buffer);
     
-    const editRes = await bot.Api.tools.editImage({ 
-      imageUrl: imageUrl, 
-      prompt: text 
+    const formData = new FormData();
+    formData.append('image', buffer, 'image.jpg');
+    formData.append('prompt', prompt);
+    if (size && validRatios.includes(size)) formData.append('size', size); // لو سبيتها زي مهي هترجع لك نفس عرض الصوره الي حطيتها
+
+    const createRes = await client.post('/process-image', formData, {
+      headers: {
+        ...formData.getHeaders()
+      }
     });
+
+    const { status, recordId, message } = createRes.data;
     
-    if (!editRes?.status || !editRes?.recordId) {
-      return m.reply("*❌ ~ فشل في بدء عملية التعديل ~*");
+    if (!status || !recordId) {
+      throw new Error(message || 'Failed to start processing');
     }
-    
-    const waitMsg = await m.reply("*🎨 ~ جاري تعديل الصورة... قد يستغرق هذا دقيقة ~*");
-    
+
     let result = null;
-    for (let j = 0; j < 30; j++) {
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      const checkRes = await bot.Api.tools.checkResult({ rid: editRes.recordId });
-      if (checkRes?.completed && checkRes?.resultUrl) {
-        result = checkRes.resultUrl;
+    let error = null;
+    let maxRetries = 40;
+    let retries = 0;
+
+    while (!result && !error && retries < maxRetries) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      retries++;
+      
+      const getRes = await client.get(`/check-result?rid=${recordId}`, {
+        responseType: 'arraybuffer'
+      });
+      
+      const contentType = getRes.headers['content-type'];
+      
+      if (contentType?.includes('application/json')) {
+        const jsonData = JSON.parse(Buffer.from(getRes.data).toString('utf-8'));
+        if (jsonData.status === false && jsonData.message !== 'Processing not completed yet') {
+          error = jsonData.message;
+          break;
+        }
+      } else if (contentType?.includes('image')) {
+        result = getRes.data;
         break;
       }
     }
-   
-    if (!result) return m.reply("*❌ ~ لم يتم الانتهاء من التعديل في الوقت المحدد ~*");
-    
+
+    if (retries >= maxRetries) throw new Error('Max retries reached, no result');
+    if (error) throw new Error(error);
+    if (!result) throw new Error('No result obtained');
+
     await conn.sendMessage(m.chat, {
-      image: { url: result },
-      caption: `✅ ~ تم التعديل بنجاح\n- *(${text})*`,
+      image: result,
+      caption: 'Done'
     }, { quoted: m });
-    
-  } catch (error) {
-    console.error(error);
-    return m.reply("*❌ ~ حدث خطأ أثناء تعديل الصورة ~*");
+
+  } catch (e) {
+    m.reply(`Error: ${e.message}`);
   }
 };
 
